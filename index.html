@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="description" content="Monxit OS — a daily-use Linux distro built for creators, gamers, and builders." />
+  <meta name="description" content="Monxit OS — a community-driven daily-use Linux distro." />
   <title>Monxit OS</title>
   <link rel="icon" href="assets/monxit-logo.png" />
   <link rel="stylesheet" href="styles.css" />
@@ -32,15 +32,15 @@
     <section class="hero">
       <div class="container hero-grid">
         <div>
-          <p class="pill">Daily-use • Cinnamon • Creator-first</p>
+          <p class="pill">Daily-use • Cinnamon • Community-driven</p>
           <h1>Monxit OS</h1>
           <p class="subtitle">
-            A clean, fast daily-use Linux distro that feels intentional — built for creators, gamers,
-            and builders. Community-driven. Straightforward. Yours.
+            A clean, fast daily-use Linux distro that feels intentional — shaped by the community.
+            Users lead. Developers build and listen. Straightforward. Yours.
           </p>
 
           <div class="cta">
-            <a class="btn" href="#download">Download (Soon)</a>
+            <a id="heroDownloadBtn" class="btn btn-disabled" href="javascript:void(0)" aria-disabled="true">Download (Soon)</a>
             <a class="btn btn-ghost" href="#features">See features</a>
           </div>
 
@@ -55,7 +55,7 @@
             </div>
             <div class="meta-card">
               <div class="meta-k">Release</div>
-              <div class="meta-v">Monxit OS 1.0 “Zena”</div>
+              <div class="meta-v"><span data-monxit-version>Monxit OS 1.0 “Zena”</span></div>
             </div>
           </div>
         </div>
@@ -95,18 +95,18 @@
           </div>
 
           <div class="card">
-            <h3>Creator-first</h3>
-            <p>Ready for development, design, and building projects without fighting your OS.</p>
+            <h3>Users lead</h3>
+            <p>Monxit is community-driven. The roadmap comes from users — feedback loops matter.</p>
+          </div>
+
+          <div class="card">
+            <h3>Builders + listeners</h3>
+            <p>Developers focus on shipping what the community wants: stable defaults and real improvements.</p>
           </div>
 
           <div class="card">
             <h3>Gaming-ready basics</h3>
-            <p>Solid daily setup for Steam + drivers + performance tweaks (as you polish releases).</p>
-          </div>
-
-          <div class="card">
-            <h3>Community-driven</h3>
-            <p>Users are the “founders” — feedback loops matter. Devs are builders + listeners.</p>
+            <p>Solid daily setup for Steam + drivers + performance tweaks (as releases mature).</p>
           </div>
 
           <div class="card">
@@ -134,12 +134,12 @@
           <div class="download-box">
             <div class="download-row">
               <div>
-                <div class="download-title">Monxit OS 1.0 “Zena”</div>
+                <div class="download-title"><span data-monxit-version>Monxit OS 1.0 “Zena”</span></div>
                 <div class="download-sub">Cinnamon • 64-bit • ISO</div>
               </div>
-              <a class="btn btn-disabled" href="javascript:void(0)" aria-disabled="true">Coming soon</a>
+              <a id="downloadBtn" class="btn btn-disabled" href="javascript:void(0)" aria-disabled="true">Coming soon</a>
             </div>
-            <div class="download-note">
+            <div class="download-note" id="downloadNote">
               Tip: When you’re ready, replace “Coming soon” with a direct link to your ISO file or releases page.
             </div>
           </div>
@@ -162,7 +162,7 @@
 
           <h3>Checksums</h3>
           <p class="muted">Add SHA256 sums here when you publish your ISO.</p>
-          <code class="code">sha256sum monxit-os-1.0-zena.iso</code>
+          <code class="code">sha256sum monxit-os-1.0-zena-cinnamon-x86_64.iso</code>
         </div>
       </div>
     </section>
@@ -235,8 +235,46 @@
   </footer>
 
   <script>
+    // ---- Configure these two lines only ----
+    const MONXIT_VERSION_TEXT = 'Monxit OS 1.0 “Zena”';
+    const ISO_URL = 'assets/monxit-os-1.0-zena-cinnamon-x86_64.iso'; // or a full https:// link
+    const ISO_READY = true; // set false to force "Coming soon"
+    // ---------------------------------------
+
     document.getElementById("year").textContent = new Date().getFullYear();
+
+    // Fill version text wherever it's used
+    document.querySelectorAll('[data-monxit-version]').forEach(el => {
+      el.textContent = MONXIT_VERSION_TEXT;
+    });
+
+    function enableButton(btn, label) {
+      btn.classList.remove('btn-disabled');
+      btn.removeAttribute('aria-disabled');
+      btn.href = ISO_URL;
+      btn.textContent = label;
+    }
+
+    function disableButton(btn, label) {
+      btn.classList.add('btn-disabled');
+      btn.setAttribute('aria-disabled', 'true');
+      btn.href = 'javascript:void(0)';
+      btn.textContent = label;
+    }
+
+    const btn = document.getElementById('downloadBtn');
+    const heroBtn = document.getElementById('heroDownloadBtn');
+    const note = document.getElementById('downloadNote');
+
+    if (ISO_READY) {
+      enableButton(btn, `Download ${MONXIT_VERSION_TEXT}`);
+      enableButton(heroBtn, `Download ${MONXIT_VERSION_TEXT}`);
+      if (note) note.textContent = `Downloading: ${MONXIT_VERSION_TEXT}`;
+    } else {
+      disableButton(btn, 'Coming soon');
+      disableButton(heroBtn, 'Download (Soon)');
+      if (note) note.textContent = 'Tip: Add your ISO link when it’s ready.';
+    }
   </script>
 </body>
 </html>
-
